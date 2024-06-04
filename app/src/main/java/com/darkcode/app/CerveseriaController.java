@@ -24,98 +24,101 @@ import com.darkcode.app.repository.CerveseriaRepository;
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
-
 public class CerveseriaController {
 
     @Autowired
-    CerveseriaRepository CerveseriaRepository;
+    private CerveseriaRepository cerveseriaRepository;
 
-    @GetMapping("/Cerveserias")
+    @GetMapping("/cerveserias")
     public ResponseEntity<List<Cerveseria>> getAllCerveserias(@RequestParam(required = false) String title) {
         try {
-            List<Cerveseria> Cerveserias = new ArrayList<Cerveseria>();
+            List<Cerveseria> cerveserias = new ArrayList<>();
 
             if (title == null)
-                Cerveserias.addAll(CerveseriaRepository.findAll()); // Get all Cerveserias
+                cerveserias.addAll(cerveseriaRepository.findAll()); // Get all Cerveserias
             else
-                Cerveserias.addAll(CerveseriaRepository.findByTitleContaining(title)); // Filter by title
+                cerveserias.addAll(cerveseriaRepository.findByTitleContaining(title)); // Filter by title
 
-            return new ResponseEntity<>(Cerveserias, HttpStatus.OK);
+            if (cerveserias.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(cerveserias, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/Cerveserias/{id}")
+    @GetMapping("/cerveserias/{id}")
     public ResponseEntity<Cerveseria> getCerveseriaById(@PathVariable("id") long id) {
-        Optional<Cerveseria> CerveseriaData = CerveseriaRepository.findById(id);
+        Optional<Cerveseria> cerveseriaData = cerveseriaRepository.findById(id);
 
-        if (CerveseriaData.isPresent()) {
-            return new ResponseEntity<>(CerveseriaData.get(), HttpStatus.OK);
+        if (cerveseriaData.isPresent()) {
+            return new ResponseEntity<>(cerveseriaData.get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/Cerveserias")
+    @PostMapping("/cerveserias")
     public ResponseEntity<Cerveseria> createCerveseria(@RequestBody Cerveseria cerveseria) {
         try {
-            Cerveseria _cerveseria = CerveseriaRepository.save(cerveseria);
+            Cerveseria _cerveseria = cerveseriaRepository.save(cerveseria);
             return new ResponseEntity<>(_cerveseria, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/Cerveserias/{id}")
+    @PutMapping("/cerveserias/{id}")
     public ResponseEntity<Cerveseria> updateCerveseria(@PathVariable("id") long id,
-            @RequestBody Cerveseria Cerveseria) {
-        Optional<Cerveseria> CerveseriaData = CerveseriaRepository.findById(id);
+            @RequestBody Cerveseria cerveseria) {
+        Optional<Cerveseria> cerveseriaData = cerveseriaRepository.findById(id);
 
-        if (CerveseriaData.isPresent()) {
-            Cerveseria _Cerveseria = CerveseriaData.get();
-            _Cerveseria.setTitle(Cerveseria.getTitle());
-            _Cerveseria.setDepartamento(Cerveseria.getDepartamento());
-            _Cerveseria.setMunicipio(Cerveseria.getMunicipio());
-            _Cerveseria.setNomencaltura(Cerveseria.getNomencaltura());
-            _Cerveseria.setMarca_cerveza(Cerveseria.getMarca_cerveza());
-            _Cerveseria.setCantidad_en_stock(Cerveseria.getCantidad_en_stock());
+        if (cerveseriaData.isPresent()) {
+            Cerveseria _cerveseria = cerveseriaData.get();
+            _cerveseria.setTitle(cerveseria.getTitle());
+            _cerveseria.setDepartamento(cerveseria.getDepartamento());
+            _cerveseria.setMunicipio(cerveseria.getMunicipio());
+            _cerveseria.setNomenclatura(cerveseria.getNomenclatura());
+            _cerveseria.setMarcaCerveza(cerveseria.getMarcaCerveza());
+            _cerveseria.setCantidadEnStock(cerveseria.getCantidadEnStock());
 
-            return new ResponseEntity<>(CerveseriaRepository.save(_Cerveseria), HttpStatus.OK);
+            return new ResponseEntity<>(cerveseriaRepository.save(_cerveseria), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/Cerveserias/{id}")
+    @DeleteMapping("/cerveserias/{id}")
     public ResponseEntity<HttpStatus> deleteCerveseria(@PathVariable("id") long id) {
         try {
-            CerveseriaRepository.deleteById(id);
+            cerveseriaRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/Cerveserias")
+    @DeleteMapping("/cerveserias")
     public ResponseEntity<HttpStatus> deleteAllCerveserias() {
         try {
-            CerveseriaRepository.deleteAll();
+            cerveseriaRepository.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/Cerveserias/Nomenclautra")
-    public ResponseEntity<List<Cerveseria>> FindByNomenclatureContaining() {
+    @GetMapping("/cerveserias/nomenclatura")
+    public ResponseEntity<List<Cerveseria>> findByNomenclaturaContaining(@RequestParam String nomenclatura) {
         try {
-            List<Cerveseria> Cerveserias = CerveseriaRepository.findByNomenclatureContaining("");
+            List<Cerveseria> cerveserias = cerveseriaRepository.findByNomenclaturaContaining(nomenclatura);
 
-            if (Cerveserias.isEmpty()) {
+            if (cerveserias.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            return new ResponseEntity<>(Cerveserias, HttpStatus.OK);
+            return new ResponseEntity<>(cerveserias, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

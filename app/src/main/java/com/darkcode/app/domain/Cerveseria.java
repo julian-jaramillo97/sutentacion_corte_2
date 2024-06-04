@@ -3,32 +3,34 @@ package com.darkcode.app.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cerveserias")
-
 public class Cerveseria {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Column(name = "title")
+
     private String title;
-
-    @Column(name = "departamento")
     private String departamento;
-    @Column(name = "municipio")
     private String municipio;
-    @Column(name = "nomenclatura")
-    private String nomencaltura;
-    @Column(name = "marca_cerveza")
-    private String marca_cerveza;
-    @Column(name = "cantidad_en_stock")
-    private Long cantidad_en_stock;
+    private String nomenclatura; // Propiedad que usas para el filtro
+    private String marcaCerveza;
+    private int cantidadEnStock;
 
+    // Getters y Setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDepartamento() {
@@ -47,45 +49,27 @@ public class Cerveseria {
         this.municipio = municipio;
     }
 
-    public String getNomencaltura() {
-        return nomencaltura;
+    public String getNomenclatura() {
+        return nomenclatura;
     }
 
-    public void setNomencaltura(String nomencaltura) {
-        this.nomencaltura = nomencaltura;
+    public void setNomenclatura(String nomenclatura) {
+        this.nomenclatura = nomenclatura;
     }
 
-    public String getMarca_cerveza() {
-        return marca_cerveza;
+    public String getMarcaCerveza() {
+        return marcaCerveza;
     }
 
-    public void setMarca_cerveza(String marca_cerveza) {
-        this.marca_cerveza = marca_cerveza;
+    public void setMarcaCerveza(String marcaCerveza) {
+        this.marcaCerveza = marcaCerveza;
     }
 
-    public Long getCantidad_en_stock() {
-        return cantidad_en_stock;
+    public int getCantidadEnStock() {
+        return cantidadEnStock;
     }
 
-    public void setCantidad_en_stock(Long cantidad_en_stock) {
-        this.cantidad_en_stock = cantidad_en_stock;
+    public void setCantidadEnStock(int cantidadEnStock) {
+        this.cantidadEnStock = cantidadEnStock;
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-    
-
-    @Override
-    public String toString() {
-        return "Cerveseria [id=" + id + ", departamento=" + departamento + ", municipio=" + municipio
-                + ", nomencaltura=" + nomencaltura + ", marca_cerveza=" + marca_cerveza + ", tipo_cerveza="
-                + cantidad_en_stock + "]";
-
-    }
-
 }
